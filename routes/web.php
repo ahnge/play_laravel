@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +17,7 @@ use App\Http\Controllers\ArticleController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('article');
 });
 
 Route::get('/articles', [
@@ -28,6 +30,38 @@ Route::get('/articles/detail/{id}', [
     'detail'
 ])->name('article.detail');
 
-Route::get('/article/more', function () {
-    return redirect()->route('article');
-});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/articles/add', [ArticleController::class, 'add']);
+
+Route::post('/articles/add', [
+    ArticleController::class,
+    'create'
+]);
+
+Route::get('/articles/delete/{id}', [
+    ArticleController::class,
+    'delete'
+]);
+
+Route::get('/articles/edit/{id}', [
+    ArticleController::class,
+    'edit'
+]);
+
+Route::post('/articles/edit/{id}', [
+    ArticleController::class,
+    'edited'
+]);
+
+Route::post('/comments/add', [
+    CommentController::class,
+    'add'
+]);
+
+Route::get('/comments/delete/{id}', [
+    CommentController::class,
+    'delete'
+]);
